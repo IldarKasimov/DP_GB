@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<ul class="list-articles">
+	<li><div class="top-search">
+	 <form class="top" action="{% url 'search' %}" method="get">
+		<input  type="search" name="res" placeholder="Поиск фильма">
+		<button type="submit">Поиск</button>
+	 </form>
+</div></li>
+
+	{% for f in films %}
+		<li><div class="article-panel">
+			<p class="first">Категория: {{f.cat.name}}</p>
+			<p class="last">Год производства: {{f.year_production}}</p>
+		</div>
+			{% if f.photo %}
+			<p><img class="img-article-left thumb" src="{{f.photo.url}}"></p>
+			{% endif %}
+			<h2>{{f.title}}</h2>
+    {% autoescape off %}
+	{{f.descriptions|linebreaks|truncatewords:50}}
+    {% endautoescape %}
+		<div class="clear"></div>
+		<p class="link-read-post"><a href="{{ f.get_absolute_url }}">Подробно</a></p>
+		</li>
+	{% endfor %}
+</ul>
+{% endblock %}
+
+{% block pagination %}
+{% if page_obj.has_other_pages %}
+<nav class="list-pages">
+    <ul>
+		{% if page_obj.has_previous %}
+			<li class="page-num">
+				<a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+			</li>
+		{% endif %}
+        {% for p in paginator.page_range %}
+		{% if p == page_obj.number %}
+			<li class=" page-num page-num-selected">{{p}}</li>
+		{% elif p >= page_obj.number|add:-1 and p <= page_obj.number|add:1 %}
+			<li class="page-num">
+				<a href="?page={{p}}">{{p}}</a>
+			</li>
+		{% endif %}
+        {% endfor %}
+		{% if page_obj.has_next %}
+			<li class="page-num">
+				<a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+			</li>
+		{% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

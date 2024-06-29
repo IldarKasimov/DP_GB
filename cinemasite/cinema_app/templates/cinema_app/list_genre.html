@@ -1,0 +1,8 @@
+{% if genres %}
+    <p>Жанры:</p>
+    <ul class="genre-list">
+        {% for g in genres %}
+            <li><a href="{{ g.get_absolute_url }}">{{g.genre}}</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}

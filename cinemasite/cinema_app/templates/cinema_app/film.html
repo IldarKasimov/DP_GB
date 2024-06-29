@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1>{{film.title}}</h1>
+
+{% if film.photo %}
+<p><img class="img-article-left" src="{{film.photo.url}}"></p>
+{% endif %}
+
+{{film.descriptions|linebreaks}}
+<p>Год производства: {{film.year_production}}</p>
+{% endblock %}
+
+{% block floor %}
+<!-- Жанры -->
+{% with film.genres.all as genres %}
+{% if genres %}
+
+<ul class="genre-list-floor">
+    <li>Жанры:</li>
+    {% for g in genres %}
+        <li><a href="{{g.get_absolute_url}}">{{g.genre}}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block feedback %}
+
+<h3 class="comment">Комментарии:</h3>
+{% if not feedback_exist %}
+    <p class="link-add-feedback"><a href="{% url 'add_feed' film.pk %}">Оставить отзыв</a></p>
+{% endif %}
+
+{% with film.feedbackcinema.all as feed %}
+    {% for f in feed %}
+    <hr>
+    <div class="article-panel">
+    Автор комментария: <b>{{ f.author.first_name }} {{ f.author.last_name }}</b>
+    </div>
+    <p>{{ f.comment }}</p>
+        {% if f.author.username == user.username %}
+            <p class="link-add-feedback"><a href="{% url 'updatefeed' f.pk %}">Изменить отзыв</a></p>
+        {% endif %}
+    <hr>
+    {% endfor %}
+{% endwith %}
+
+{% endblock %}
