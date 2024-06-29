@@ -29,7 +29,7 @@
 
 {% block feedback %}
 
-<h3 class="comment">Комментарии:</h3>
+<h3 class="comment">Отзывы:</h3>
 {% if not feedback_exist %}
     <p class="link-add-feedback"><a href="{% url 'add_feed' film.pk %}">Оставить отзыв</a></p>
 {% endif %}
@@ -38,7 +38,7 @@
     {% for f in feed %}
     <hr>
     <div class="article-panel">
-    Автор комментария: <b>{{ f.author.first_name }} {{ f.author.last_name }}</b>
+    Автор отзыва: <b>{{ f.author.first_name }} {{ f.author.last_name }}</b>
     </div>
     <p>{{ f.comment }}</p>
         {% if f.author.username == user.username %}
